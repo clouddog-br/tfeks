@@ -78,7 +78,7 @@ terraform apply
 
 Get the outputs to update the configurations
 - Update the provider.tf with the assume role 
-- Put the auth_user/auth_role on the tfvars file to give access to your default user
+- Put the auth_user/auth_role on the terraform.tfvars file to give access to your default user
 
 Return to main project
 

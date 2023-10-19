@@ -38,6 +38,14 @@ module "eks" {
   azs = local.azs
 }
 
+module "eks_karpenter_manifests" {
+  depends_on = [ module.eks ]
+  source = "./modules/eks-karpenter-manifests"
+
+  cluster_name = module.eks.cluster_name
+  azs = local.azs
+}
+
 module "eks_rbac_default_roles" {
   depends_on = [ module.eks ]
   source = "./modules/eks-rbac-default-roles"
@@ -84,3 +92,17 @@ module "eks-ebs-csi-driver" {
   helm_chart_version = "2.23.1"
   cluster_identity_oidc_provider = module.eks.oidc_provider
 }
+
+module "eks-prometheus" {
+  depends_on = [ module.eks ]
+  source = "./modules/eks-prometheus"
+
+  helm_chart_version = "25.1"
+}
+
+# module "eks-grafana" {
+#   depends_on = [ module.eks ]
+#   source = "./modules/eks-grafana"
+
+#   helm_chart_version = "grafana-6.61.1"
+# }
