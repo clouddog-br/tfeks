@@ -4,13 +4,11 @@
 # https://github.com/cloudposse/terraform-aws-tfstate-backend#usage
 module "terraform_state_backend" {
   source = "cloudposse/tfstate-backend/aws"
-
-  count = var.create_state_storage ? 1 : 0
   
   version     = "1.1.1"
-  namespace  = "apolinario"
-  stage      = "test"
-  name       = "terraform"
+  namespace  = var.namespace
+  stage      = var.stage
+  name       = var.name
   attributes = ["state"]
 
   terraform_backend_config_file_path = "."
