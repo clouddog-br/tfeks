@@ -10,7 +10,7 @@ output "eks_creation_role" {
 output "assume_role" {
   description = "Assume role to put on main.tf file to assume role and create the eks as this role"
   value = {
-    role_arn    = "arn:aws:iam::153149144027:role/eks_creation_role"
+    role_arn    = aws_iam_role.eks_creation_role.arn
     external_id = "eks_creation_role"
   }
 }
