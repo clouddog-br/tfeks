@@ -3,7 +3,7 @@ data "aws_availability_zones" "available" {}
 data "aws_caller_identity" "current" { }
 
 locals {
-  name   = basename(path.cwd)
+  name   = var.cluster_name
   region = data.aws_region.current.name
 
   azs = slice(data.aws_availability_zones.available.names, 0, var.qtt_az)
