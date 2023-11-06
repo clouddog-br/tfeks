@@ -22,6 +22,10 @@ terraform apply
 
 Get the outputs generated
 
+### Assume role
+
+Get the output assume_role to fill on provider.tf
+
 Go to the main project and put the role on provider.tf
 
 ex:
@@ -35,6 +39,10 @@ provider "aws" {
   }
 }
 ```
+
+### auth_user/auth_role
+
+Get the output auth_roles or auth_user to fill on provider.tf
 
 Go on the tfvars and put the auth_user/auth_role
 
