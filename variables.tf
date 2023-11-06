@@ -1,5 +1,5 @@
 variable "cluster_name" {
-  description = "EKS Cluster Name"
+  description = "Cluster Name, it will create everything based on this name. default as: COMPANY_ENV. ex: clouddog-dev"
   type        = string
 }
 
