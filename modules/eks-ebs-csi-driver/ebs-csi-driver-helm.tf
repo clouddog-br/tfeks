@@ -24,6 +24,10 @@ resource "helm_release" "aws_ebs_csi_driver" {
     name  = "controller.serviceAccount.create"
     value = "true"
   }
+  set {
+    name  = "node.tolerateAllTaints"
+    value = "true"
+  }
 
   set {
     name  = "controller.serviceAccount.name"

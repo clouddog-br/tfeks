@@ -12,6 +12,8 @@ resource "kubectl_manifest" "storage_class_gp3" {
     provisioner: ebs.csi.aws.com
     volumeBindingMode: WaitForFirstConsumer
     parameters:
+      encrypted: 'true'
       type: gp3
+    reclaimPolicy: Retain
   YAML
 }

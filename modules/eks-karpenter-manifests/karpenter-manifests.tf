@@ -86,52 +86,49 @@ resource "kubectl_manifest" "karpenter_default_provisioner" {
 #   YAML
 # }
 
-# resource "kubectl_manifest" "karpenter_monitoring_provisioner" {
-#   yaml_body = <<-YAML
-#     apiVersion: karpenter.sh/v1alpha5
-#     kind: Provisioner
-#     metadata:
-#       name: monitoring
-#     spec:
-#       labels:
-#         role: monitoring
-#       requirements:
-#         - key: "karpenter.k8s.aws/instance-category"
-#           operator: In
-#           values: ["t"]
-#         - key: karpenter.k8s.aws/instance-generation
-#           operator: Gt
-#           values: ["2"]
-#         - key: "karpenter.k8s.aws/instance-cpu"
-#           operator: In
-#           values: ["2"]
-#         - key: "karpenter.k8s.aws/instance-size"
-#           operator: In
-#           values: ["large"]
-#         - key: "karpenter.k8s.aws/instance-hypervisor"
-#           operator: In
-#           values: ["nitro"]
-#         - key: "topology.kubernetes.io/zone"
-#           operator: In
-#           values: ${jsonencode(slice(var.azs, 0, 1))}
-#         - key: "kubernetes.io/arch"
-#           operator: In
-#           values: ["amd64"]
-#         - key: "karpenter.sh/capacity-type"
-#           operator: In
-#           values: ["on-demand"]
-#       kubeletConfiguration:
-#         containerRuntime: containerd
-#         imageGCHighThresholdPercent: 85
-#         imageGCLowThresholdPercent: 80
-#       consolidation:
-#         enabled: false
-#       providerRef:
-#         name: default
-#       ttlSecondsUntilExpired: 604800 # 7 Days = 7 * 24 * 60 * 60 Seconds
-#       weight: 0
-#   YAML
-# }
+resource "kubectl_manifest" "karpenter_monitoring_provisioner" {
+  yaml_body = <<-YAML
+    apiVersion: karpenter.sh/v1alpha5
+    kind: Provisioner
+    metadata:
+      name: monitoring
+    spec:
+      labels:
+        role: monitoring
+      requirements:
+        - key: node.kubernetes.io/instance-type
+          operator: In
+          values: ["t3.large"]
+        - key: "karpenter.k8s.aws/instance-category"
+          operator: In
+          values: ["t"]
+        - key: karpenter.k8s.aws/instance-generation
+          operator: Gt
+          values: ["2"]
+        - key: "karpenter.k8s.aws/instance-hypervisor"
+          operator: In
+          values: ["nitro"]
+        - key: "topology.kubernetes.io/zone"
+          operator: In
+          values: ${jsonencode(slice(var.azs, 0, 1))}
+        - key: "kubernetes.io/arch"
+          operator: In
+          values: ["amd64"]
+        - key: "karpenter.sh/capacity-type"
+          operator: In
+          values: ["on-demand"]
+      kubeletConfiguration:
+        containerRuntime: containerd
+        imageGCHighThresholdPercent: 85
+        imageGCLowThresholdPercent: 80
+      consolidation:
+        enabled: false
+      providerRef:
+        name: default
+      ttlSecondsUntilExpired: 604800 # 7 Days = 7 * 24 * 60 * 60 Seconds
+      weight: 1
+  YAML
+}
 
 resource "kubectl_manifest" "karpenter_node_template" {
   yaml_body = <<-YAML
