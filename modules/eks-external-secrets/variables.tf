@@ -26,7 +26,7 @@ variable "service_account_name" {
 
 variable "helm_chart_version" {
   type        = string
-  default     = "0.9.5"
+  default     = "0.9.8"
   description = "External Secrets Helm chart version."
 }
 

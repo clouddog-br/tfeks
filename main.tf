@@ -78,7 +78,7 @@ module "eks-external-secrets" {
 
   cluster_name = module.eks.cluster_name
   aws_region = local.region
-  helm_chart_version = "0.9.5"
+  helm_chart_version = "0.9.8"
   secret_store_namespace = var.es_secret_store_namespace
   cluster_identity_oidc_issuer = module.eks.oidc_provider
   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
@@ -94,7 +94,7 @@ module "eks-ebs-csi-driver" {
 }
 
 module "eks-prometheus" {
-  depends_on = [ module.eks ]
+  depends_on = [ module.eks, module.eks-ebs-csi-driver ]
   source = "./modules/eks-prometheus"
 
   helm_chart_version = "25.1"
