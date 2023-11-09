@@ -2,8 +2,15 @@ server:
   global:
     scrape_interval: 30s
     evaluation_interval: 30s
-    podAnnotations:
-      karpenter.sh/do-not-evict: "true"
+    # podAnnotations:
+    #   karpenter.sh/do-not-evict: "true"
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 500m
+      memory: 512Mi
   # remoteWrite:
   #   -
   #     queue_config:
@@ -23,21 +30,9 @@ server:
     storageClass: gp3
     size: 20Gi
 
-alertmanager:
-  enabled: true
-  nodeSelector:
-    role: monitoring
-  persistentVolume:
-    storageClass: gp3
 
-pushgateway:
-  enabled: true
-  nodeSelector:
-    role: monitoring
-
-nodeExporter:
-  nodeSelector:
-    role: monitoring
+prometheus-node-exporter:
+  enabled: false
 
 kube-state-metrics:
   enabled: true

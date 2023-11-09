@@ -98,11 +98,12 @@ module "eks-prometheus" {
   source = "./modules/eks-prometheus"
 
   helm_chart_version = "25.1"
+  node_exporter_helm_chart_version = "4.23.2"
 }
 
-# module "eks-grafana" {
-#   depends_on = [ module.eks ]
-#   source = "./modules/eks-grafana"
+module "eks-grafana" {
+  depends_on = [ module.eks ]
+  source = "./modules/eks-grafana"
 
-#   helm_chart_version = "grafana-6.61.1"
-# }
+  helm_chart_version = "7.0.3"
+}

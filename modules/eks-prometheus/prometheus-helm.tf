@@ -11,3 +11,17 @@ resource "helm_release" "prometheus" {
   ]
 
 }
+
+resource "helm_release" "node_exporter" {
+  depends_on = [ helm_release.prometheus ]
+  name       = "prometheus-node-exporter"
+  chart      = "prometheus-node-exporter"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  version    = var.node_exporter_helm_chart_version
+  namespace  = var.namespace
+
+  values = [
+    "${file("${path.module}/prometheus-node-exporter-config.yaml")}"
+  ]
+
+}
