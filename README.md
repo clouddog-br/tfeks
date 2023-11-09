@@ -120,3 +120,11 @@ For exclude everything, use this command:
 ```
 terraform destroy
 ```
+
+# Configuring Lens
+
+open the cluster on lens, go to settings, metrics.
+
+Fullfill the fields with:
+Prometheus: Helm
+Prometheus Service Address: monitoring/prometheus-server:80
