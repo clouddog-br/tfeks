@@ -52,7 +52,7 @@ module "eks_rbac_default_roles" {
 }
 
 module "eks_loadbalancer" {
-  depends_on = [ module.eks ]
+  depends_on = [ module.eks, module.eks_karpenter_manifests ]
   source = "./modules/eks-load-balancer-controller"
 
   cluster_name = module.eks.cluster_name
@@ -67,6 +67,7 @@ module "eks_loadbalancer" {
 resource "kubernetes_namespace" "es_secret_store_namespace" {
   depends_on = [ module.eks ]
   for_each = toset(var.es_secret_store_namespace)
+
   metadata {
     name = each.key
   }
@@ -85,7 +86,7 @@ module "eks-external-secrets" {
 }
 
 module "eks-ebs-csi-driver" {
-  depends_on = [ module.eks ]
+  depends_on = [ module.eks, module.eks_karpenter_manifests ]
   source = "./modules/eks-ebs-csi-driver"
 
   cluster_name = module.eks.cluster_name
@@ -102,8 +103,21 @@ module "eks-prometheus" {
 }
 
 module "eks-grafana" {
-  depends_on = [ module.eks ]
+  depends_on = [ module.eks, module.eks-ebs-csi-driver ]
   source = "./modules/eks-grafana"
 
   helm_chart_version = "7.0.3"
+}
+
+module "eks-app-mesh" {
+  depends_on = [ module.eks, module.eks_karpenter_manifests ]
+  source = "./modules/eks-app-mesh"
+
+  cluster_name = module.eks.cluster_name
+  helm_chart_version = "v1.12.3"
+  
+  app_mesh_sidecard_namespace = var.app_mesh_sidecard_namespace
+  karpenter_role_name = module.eks.karpenter_role_name
+  cluster_identity_oidc_provider = module.eks.oidc_provider
+  tracing_enabled = true
 }

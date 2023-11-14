@@ -126,3 +126,11 @@ variable "es_secret_store_namespace" {
   type        = list(string)
   description = "Namespaces to create the external secrets secret store"
 }
+
+###########################################
+############# App Mesh ###############
+###########################################
+variable "app_mesh_sidecard_namespace" {
+  type        = list(string)
+  description = "Namespaces to create the App Mesh sidecards"
+}

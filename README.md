@@ -115,7 +115,15 @@ terraform apply
 
 # how to remove everything?
 
-For exclude everything, use this command:
+For exclude everything, first remove all modules to your cluster.
+
+Comment everything, except VPC and EKS on main.tf and run:
+
+```
+terraform apply
+```
+
+after removed all modules with terraform apply, use the command:
 
 ```
 terraform destroy
@@ -128,3 +136,16 @@ open the cluster on lens, go to settings, metrics.
 Fullfill the fields with:
 Prometheus: Helm
 Prometheus Service Address: monitoring/prometheus-server:80
+
+
+# Import existing namespace
+
+Example to import a existing namespace to terraform state
+
+terraform import 'kubernetes_namespace.es_secret_store_namespace["NAMESPACE_NAME"]' NAMESPACE_NAME
+
+ex:
+
+```
+terraform import 'kubernetes_namespace.es_secret_store_namespace["yelb"]' yelb
+```
