@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: your-job
+  namespace: nginx-app
+spec:
+  template:
+    metadata:
+      labels:
+        app: your-app
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: role
+                    operator: In
+                    values:
+                      - monitoring
+              topologyKey: kubernetes.io/hostname
+      containers:
+        - name: your-container
+          image: your-image
+          command: ["your-command"]
+      restartPolicy: Never
