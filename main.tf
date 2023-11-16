@@ -64,9 +64,9 @@ module "eks_loadbalancer" {
   
 }
 
-resource "kubernetes_namespace" "es_secret_store_namespace" {
+resource "kubernetes_namespace" "all" {
   depends_on = [ module.eks ]
-  for_each = toset(var.es_secret_store_namespace)
+  for_each = toset(distinct(concat(var.es_secret_store_namespace, var.app_mesh_sidecard_namespace)))
 
   metadata {
     name = each.key
@@ -121,3 +121,20 @@ module "eks-app-mesh" {
   cluster_identity_oidc_provider = module.eks.oidc_provider
   tracing_enabled = true
 }
+
+# module "eks-cloudwatch-logs-only" {
+#   depends_on = [ module.eks, module.eks_karpenter_manifests ]
+#   source = "./modules/eks-cloudwatch-logs-only"
+
+#   helm_chart_version = "0.1.32"
+#   cwlogRetentionDays = 365
+#   karpenter_role_name = module.eks.karpenter_role_name
+# }
+
+# module "eks-cloudwatch-container-insights" {
+#   depends_on = [ module.eks, module.eks_karpenter_manifests ]
+#   source = "./modules/eks-cloudwatch-container-insights"
+  
+#   cluster_name = module.eks.cluster_name
+#   karpenter_role_name = module.eks.karpenter_role_name
+# }
