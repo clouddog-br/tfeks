@@ -74,7 +74,7 @@ resource "kubernetes_namespace" "all" {
 }
 
 module "eks-external-secrets" {
-  depends_on = [ module.eks, kubernetes_namespace.es_secret_store_namespace ]
+  depends_on = [ module.eks, kubernetes_namespace.all ]
   source = "./modules/eks-external-secrets"
 
   cluster_name = module.eks.cluster_name
