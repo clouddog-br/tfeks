@@ -120,7 +120,15 @@ For exclude everything, first remove all modules to your cluster.
 Comment everything, except VPC and EKS on main.tf and run:
 
 ```
-terraform apply
+terraform apply -var-file ENV_NAME.tfvars
+```
+
+ex:
+```
+terraform apply -var-file test.tfvars
+terraform apply -var-file dev.tfvars
+terraform apply -var-file stg.tfvars
+terraform apply -var-file prd.tfvars
 ```
 
 after removed all modules with terraform apply, use the command:

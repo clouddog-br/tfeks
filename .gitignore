@@ -31,6 +31,6 @@ terraform.rc
 **/downloaded-*
 
 # Remove it to use for client
-*.tfvars
+terraform.tfvars
 *.tfvars.json
 backend.tf
