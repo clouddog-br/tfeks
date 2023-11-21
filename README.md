@@ -109,11 +109,13 @@ terraform plan -var-file ENV_NAME.tfvars
 
 Before create the resources, create a workspace to environment
 
+```
 terraform workspace new dev
 terraform workspace new stg
 terraform workspace new prd
 
 terraform select dev 
+```
 
 
 ## Apply all changes
