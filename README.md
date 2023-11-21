@@ -107,18 +107,33 @@ terraform plan -var-file ENV_NAME.tfvars
 
 ## Apply all changes
 
+### Create workspaces for the environments
+
 Before create the resources, create a workspace to environment
 
+terraform workspace new ENV_NAME
+
+ex:
 ```
 terraform workspace new dev
 terraform workspace new stg
 terraform workspace new prd
-
-terraform select dev 
 ```
 
 
-## Apply all changes
+### Change between workspaces
+
+Before create the resources, create a workspace to environment
+
+terraform select ENV_NAME
+
+ex
+```
+terraform select dev
+```
+
+
+### Create / Apply the changes on environment
 
 This command will apply all changes maide in your IaC tf files to your environment
 
