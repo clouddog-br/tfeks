@@ -1,0 +1,23 @@
+grafana.ini:
+  auth:
+    sigv4_auth_enabled: true
+persistence:
+  enabled: true
+  # persistence.type: statefulset
+  existingClaim: grafana-pvc
+nodeSelector:
+    role: monitoring
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-server.monitoring.svc.cluster.local
+      access: proxy
+      isDefault: true
+podDisruptionBudget:
+  apiVersion: "policy/v1"
+  minAvailable: 1
+podAnnotations:
+  karpenter.sh/do-not-evict: "true"

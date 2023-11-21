@@ -3,7 +3,7 @@ data "aws_availability_zones" "available" {}
 data "aws_caller_identity" "current" { }
 
 locals {
-  name   = basename(path.cwd)
+  name   = var.cluster_name
   region = data.aws_region.current.name
 
   azs = slice(data.aws_availability_zones.available.names, 0, var.qtt_az)
@@ -38,13 +38,21 @@ module "eks" {
   azs = local.azs
 }
 
+module "eks_karpenter_manifests" {
+  depends_on = [ module.eks ]
+  source = "./modules/eks-karpenter-manifests"
+
+  cluster_name = module.eks.cluster_name
+  azs = local.azs
+}
+
 module "eks_rbac_default_roles" {
   depends_on = [ module.eks ]
   source = "./modules/eks-rbac-default-roles"
 }
 
 module "eks_loadbalancer" {
-  depends_on = [ module.eks ]
+  depends_on = [ module.eks, module.eks_karpenter_manifests ]
   source = "./modules/eks-load-balancer-controller"
 
   cluster_name = module.eks.cluster_name
@@ -56,31 +64,77 @@ module "eks_loadbalancer" {
   
 }
 
-resource "kubernetes_namespace" "es_secret_store_namespace" {
+resource "kubernetes_namespace" "all" {
   depends_on = [ module.eks ]
-  for_each = toset(var.es_secret_store_namespace)
+  for_each = toset(distinct(concat(var.es_secret_store_namespace, var.app_mesh_sidecard_namespace)))
+
   metadata {
     name = each.key
   }
 }
 
 module "eks-external-secrets" {
-  depends_on = [ module.eks, kubernetes_namespace.es_secret_store_namespace ]
+  depends_on = [ module.eks, kubernetes_namespace.all ]
   source = "./modules/eks-external-secrets"
 
   cluster_name = module.eks.cluster_name
   aws_region = local.region
-  helm_chart_version = "0.9.5"
+  helm_chart_version = "0.9.8"
   secret_store_namespace = var.es_secret_store_namespace
   cluster_identity_oidc_issuer = module.eks.oidc_provider
   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
 }
 
 module "eks-ebs-csi-driver" {
-  depends_on = [ module.eks ]
+  depends_on = [ module.eks, module.eks_karpenter_manifests ]
   source = "./modules/eks-ebs-csi-driver"
 
   cluster_name = module.eks.cluster_name
   helm_chart_version = "2.23.1"
   cluster_identity_oidc_provider = module.eks.oidc_provider
 }
+
+module "eks-prometheus" {
+  depends_on = [ module.eks, module.eks-ebs-csi-driver ]
+  source = "./modules/eks-prometheus"
+
+  helm_chart_version = "25.1"
+  node_exporter_helm_chart_version = "4.23.2"
+}
+
+module "eks-grafana" {
+  depends_on = [ module.eks, module.eks-ebs-csi-driver ]
+  source = "./modules/eks-grafana"
+
+  helm_chart_version = "7.0.3"
+}
+
+module "eks-app-mesh" {
+  depends_on = [ module.eks, module.eks_karpenter_manifests ]
+  source = "./modules/eks-app-mesh"
+
+  cluster_name = module.eks.cluster_name
+  helm_chart_version = "v1.12.3"
+  
+  app_mesh_sidecard_namespace = var.app_mesh_sidecard_namespace
+  karpenter_role_name = module.eks.karpenter_role_name
+  cluster_identity_oidc_provider = module.eks.oidc_provider
+  tracing_enabled = true
+}
+
+# module "eks-cloudwatch-logs-only" {
+#   depends_on = [ module.eks, module.eks_karpenter_manifests ]
+#   source = "./modules/eks-cloudwatch-logs-only"
+
+#   helm_chart_version = "0.1.32"
+#   cwlogRetentionDays = 365
+#   karpenter_role_name = module.eks.karpenter_role_name
+# }
+
+# module "eks-cloudwatch-container-insights" {
+#   depends_on = [ module.eks, module.eks_karpenter_manifests ]
+#   source = "./modules/eks-cloudwatch-container-insights"
+  
+#   cluster_name = module.eks.cluster_name
+#   karpenter_role_name = module.eks.karpenter_role_name
+# }

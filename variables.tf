@@ -1,3 +1,8 @@
+variable "cluster_name" {
+  description = "Cluster Name, it will create everything based on this name. default as: COMPANY_ENV. ex: clouddog-dev"
+  type        = string
+}
+
 variable "aws_region" {
   description = "AWS Region to run the EKS"
   type = string
@@ -7,6 +12,10 @@ variable "qtt_az" {
   description = "Number of Zones to use"
   type        = number
   default     = 3
+}
+
+variable "default_aws_tags" {
+  description = "Object with Default AWS Tags to implement on all resources"
 }
 
 ###########################################
@@ -120,4 +129,12 @@ variable "all_outputs" {
 variable "es_secret_store_namespace" {
   type        = list(string)
   description = "Namespaces to create the external secrets secret store"
+}
+
+###########################################
+############# App Mesh ###############
+###########################################
+variable "app_mesh_sidecard_namespace" {
+  type        = list(string)
+  description = "Namespaces to create the App Mesh sidecards"
 }

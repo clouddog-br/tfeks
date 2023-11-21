@@ -18,7 +18,7 @@ locals {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 19.16"
+  version = "~> 19.17"
 
   cluster_name                   = local.name
   cluster_version                = var.kubernetes_version
@@ -42,7 +42,7 @@ module "eks" {
   # aws eks describe-addon-versions --addon-name kube-proxy
   cluster_addons = {
     kube-proxy = {
-      addon_version = "v1.27.1-eksbuild.1"
+      addon_version = "v1.28.2-eksbuild.2"
     }
     vpc-cni    = {
       addon_version = "v1.15.0-eksbuild.2"

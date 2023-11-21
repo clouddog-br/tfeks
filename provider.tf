@@ -2,10 +2,7 @@ provider "aws" {
   region = var.aws_region
 
   default_tags {
-    tags = {
-      Environment = "Test"
-      # Environment = local.name
-    }
+    tags = var.default_aws_tags
   }
 
   # # Descomment and put the Role to create the EKS Cluster
@@ -13,6 +10,11 @@ provider "aws" {
   #   role_arn    = "arn:aws:iam::66666666:role/eks_creation_role"
   #   external_id = "eks_creation_role"
   # }
+  assume_role {
+    external_id = "eks_creation_role"
+    role_arn = "arn:aws:iam::122753118347:role/eks_creation_role"
+  }
+
 }
 
 

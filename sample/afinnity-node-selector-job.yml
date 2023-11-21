@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: highres-rsync-cronjob
+
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        nodeSelector:
+          role: intel
+        spec:
+          containers:
+          - name: rsync-cronjob
+            image: eeacms/rsync
+            args:
+            - /bin/sh
+            - -c
+            -  "find /data/high-res/ -cmin +20 -printf %P\\0 | rsync -zarvhO --remove-source-files /data/high-res/ /mnt/high-res/ --exclude '*_1.egg'"
+          restartPolicy: OnFailure

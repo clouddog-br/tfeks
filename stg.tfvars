@@ -1,7 +1,7 @@
 aws_region = "us-east-1"
 
 # VPC
-cidr = "10.0.0.0/16"
+cidr = "10.1.0.0/16"
 qtt_az = 3
 create_subnet_public = true
 create_subnet_private = true
@@ -9,12 +9,12 @@ create_nat_gateway = true
 one_nat_gateway_per_az = false
 create_subnet_data = true
 default_aws_tags = {
-  Environment = "Test"
+  Environment = "stg"
 }
 
 # EKS
 cluster_endpoint_public_access = true #only for tests, it must be private with VPN
-kubernetes_version = "1.27"
+kubernetes_version = "1.28"
 
 # # Ex of auth_users
 # auth_users = [
@@ -41,8 +41,18 @@ kubernetes_version = "1.27"
 #     ]
 #   }
 # ]
+auth_roles = [
+  {
+    groups = [
+      "system:masters",
+    ]
+    rolearn = "arn:aws:iam::xxxx:role/AWSReservedSSO_AWSAdministratorAccess_xxxxxxx"
+    username = "admin"
+  }
+]
 
 all_outputs = false
-es_secret_store_namespace = ["dev"]
-app_mesh_sidecard_namespace = ["dev"]
-#cluster_name = "tfeks"
+es_secret_store_namespace = ["stg"]
+app_mesh_sidecard_namespace = ["stg"]
+# cluster_name = "EMPRESA-stg"
+

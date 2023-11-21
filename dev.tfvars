@@ -9,12 +9,12 @@ create_nat_gateway = true
 one_nat_gateway_per_az = false
 create_subnet_data = true
 default_aws_tags = {
-  Environment = "Test"
+  Environment = "dev"
 }
 
 # EKS
 cluster_endpoint_public_access = true #only for tests, it must be private with VPN
-kubernetes_version = "1.27"
+kubernetes_version = "1.28"
 
 # # Ex of auth_users
 # auth_users = [
@@ -41,8 +41,18 @@ kubernetes_version = "1.27"
 #     ]
 #   }
 # ]
+auth_roles = [
+  {
+    groups = [
+      "system:masters",
+    ]
+    rolearn = "arn:aws:iam::xxxx:role/AWSReservedSSO_AWSAdministratorAccess_xxxxxxx"
+    username = "admin"
+  }
+]
 
 all_outputs = false
-es_secret_store_namespace = ["dev"]
-app_mesh_sidecard_namespace = ["dev"]
-#cluster_name = "tfeks"
+es_secret_store_namespace = ["dev", "yelb"]
+app_mesh_sidecard_namespace = ["dev", "yelb"]
+# cluster_name = "EMPRESA-dev"
+

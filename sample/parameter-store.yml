@@ -1,0 +1,58 @@
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: authenticate-parameters
+  namespace: new-dev
+spec:
+  refreshInterval: 30s
+  secretStoreRef:
+    kind: SecretStore
+    name: aws-parameterstore
+  target:
+    creationPolicy: 'Owner'
+    deletionPolicy: "Delete"
+  data:
+    - remoteRef:
+        key: /common/SOME_COMMON_ENV
+      secretKey: MY_SECRET_ENV_ON_CONTAINER
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      serviceAccountName: nginx-deployment-sa
+      containers:
+      - name: nginx-deployment
+        envFrom:
+        - secretRef:
+            name: authenticate-parameters
+        image: nginx
+        ports:
+        - containerPort: 80
