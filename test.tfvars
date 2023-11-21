@@ -8,6 +8,9 @@ create_subnet_private = true
 create_nat_gateway = true
 one_nat_gateway_per_az = false
 create_subnet_data = true
+default_aws_tags = {
+  Environment = "test"
+}
 
 # EKS
 cluster_endpoint_public_access = true #only for tests, it must be private with VPN
@@ -48,7 +51,7 @@ auth_roles = [
   }
 ]
 
-all_outputs = false
+all_outputs = true
 es_secret_store_namespace = ["dev", "yelb"]
 app_mesh_sidecard_namespace = ["dev", "yelb"]
 cluster_name = "teste-apolinario"

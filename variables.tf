@@ -14,6 +14,10 @@ variable "qtt_az" {
   default     = 3
 }
 
+variable "default_aws_tags" {
+  description = "Object with Default AWS Tags to implement on all resources"
+}
+
 ###########################################
 ############# VPC Variables ###############
 ###########################################

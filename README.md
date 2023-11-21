@@ -102,22 +102,23 @@ cd ../
 This command will show the plan of execution with all changes
 
 ```
-terraform plan
+terraform plan -var-file ENV_NAME.tfvars
 ```
 
 ## Apply all changes
 
+Before create the resources, create a workspace to environment
+
+terraform workspace new dev
+terraform workspace new stg
+terraform workspace new prd
+
+terraform select dev 
+
+
+## Apply all changes
+
 This command will apply all changes maide in your IaC tf files to your environment
-
-```
-terraform apply
-```
-
-# how to remove everything?
-
-For exclude everything, first remove all modules to your cluster.
-
-Comment everything, except VPC and EKS on main.tf and run:
 
 ```
 terraform apply -var-file ENV_NAME.tfvars
@@ -129,6 +130,17 @@ terraform apply -var-file test.tfvars
 terraform apply -var-file dev.tfvars
 terraform apply -var-file stg.tfvars
 terraform apply -var-file prd.tfvars
+```
+
+
+# how to remove everything?
+
+For exclude everything, first remove all modules to your cluster.
+
+Comment everything, except VPC and EKS on main.tf and run:
+
+```
+terraform apply -var-file ENV_NAME.tfvars
 ```
 
 after removed all modules with terraform apply, use the command:

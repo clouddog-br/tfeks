@@ -2,10 +2,7 @@ provider "aws" {
   region = var.aws_region
 
   default_tags {
-    tags = {
-      Environment = "Test"
-      # Environment = local.name
-    }
+    tags = var.default_aws_tags
   }
 
   # # Descomment and put the Role to create the EKS Cluster

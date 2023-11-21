@@ -8,6 +8,9 @@ create_subnet_private = true
 create_nat_gateway = true
 one_nat_gateway_per_az = false
 create_subnet_data = true
+default_aws_tags = {
+  Environment = "dev"
+}
 
 # EKS
 cluster_endpoint_public_access = true #only for tests, it must be private with VPN
