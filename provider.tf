@@ -10,10 +10,6 @@ provider "aws" {
   #   role_arn    = "arn:aws:iam::66666666:role/eks_creation_role"
   #   external_id = "eks_creation_role"
   # }
-  assume_role {
-    external_id = "eks_creation_role"
-    role_arn = "arn:aws:iam::122753118347:role/eks_creation_role"
-  }
 
 }
 
