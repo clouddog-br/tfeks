@@ -46,3 +46,8 @@ variable "karpenter_helm_chart_version" {
   default     = "v0.31.1"
   description = "Karpenter Helm chart version."
 }
+
+# variable "kms_key_owners" {
+#   type        = list
+#   description = "KSM Key Owners"
+# }

@@ -55,4 +55,4 @@ all_outputs = false
 es_secret_store_namespace = ["prd"]
 app_mesh_sidecard_namespace = ["prd"]
 # cluster_name = "EMPRESA-prd"
-
+# certificate_arn = "arn:aws:acm:us-east-1:xxxxxxxx:certificate/xxxxxx-xxxx-xxxx-xxxx-xxxxxxx"

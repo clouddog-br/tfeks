@@ -154,6 +154,19 @@ terraform apply -var-file prd.tfvars
 
 For exclude everything, first remove all modules to your cluster.
 
+
+```
+kubectl delete --all virtualgateways.appmesh.k8s.aws --all-namespaces
+kubectl delete --all virtualrouters.appmesh.k8s.aws --all-namespaces
+kubectl delete --all virtualservices.appmesh.k8s.aws --all-namespaces
+kubectl delete --all virtualnodes.appmesh.k8s.aws --all-namespaces
+kubectl delete --all deployments --namespace=dev
+kubectl delete --all deployments --namespace=yelb
+kubectl delete --all ingress --namespace=monitoring
+kubectl delete --all deployments --namespace=monitoring
+kubectl delete --all deployments --namespace=monitoring
+```
+
 Comment everything, except VPC and EKS on main.tf and run:
 
 ```

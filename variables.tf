@@ -18,6 +18,15 @@ variable "default_aws_tags" {
   description = "Object with Default AWS Tags to implement on all resources"
 }
 
+variable "certificate_arn" {
+  description = "Certificate ARN to Loadbalancers"
+}
+
+# variable "kms_key_owners" {
+#   type        = list
+#   description = "KSM Key Owners"
+# }
+
 ###########################################
 ############# VPC Variables ###############
 ###########################################

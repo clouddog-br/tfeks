@@ -34,8 +34,17 @@ module "eks" {
   kubernetes_version = var.kubernetes_version
   auth_users = var.auth_users
   auth_roles = var.auth_roles
+  # kms_key_owners = var.kms_key_owners
 
   azs = local.azs
+}
+
+module "security_groups" {
+  depends_on = [ module.vpc ]
+  source = "./modules/security-groups"
+
+  cluster_name = module.eks.cluster_name
+  vpc_id = module.vpc.vpc_id
 }
 
 module "eks_karpenter_manifests" {
@@ -103,10 +112,20 @@ module "eks-prometheus" {
 }
 
 module "eks-grafana" {
-  depends_on = [ module.eks, module.eks-ebs-csi-driver ]
+  depends_on = [ module.eks, module.eks-ebs-csi-driver, module.security_groups ]
   source = "./modules/eks-grafana"
 
   helm_chart_version = "7.0.3"
+}
+
+module "eks-grafana-ingress-alb" {
+  depends_on = [ module.eks, module.security_groups, module.eks-grafana ]
+  source = "./modules/eks-grafana-ingress-alb"
+
+  alb_name = "${module.eks.cluster_name}-alb"
+  alb_group_order = 1
+  alb_security_groups = module.security_groups.alb_security_group_id
+  alb_certificate_arn = var.certificate_arn
 }
 
 module "eks-app-mesh" {

@@ -55,4 +55,4 @@ all_outputs = false
 es_secret_store_namespace = ["stg"]
 app_mesh_sidecard_namespace = ["stg"]
 # cluster_name = "EMPRESA-stg"
-
+# certificate_arn = "arn:aws:acm:us-east-1:xxxxxxxx:certificate/xxxxxx-xxxx-xxxx-xxxx-xxxxxxx"

@@ -32,6 +32,8 @@ module "eks" {
   manage_aws_auth_configmap = true
   aws_auth_roles = local.aws_auth_roles
   aws_auth_users = local.aws_auth_users
+  # create_kms_key = false
+  # kms_key_owners = var.kms_key_owners
 
 
   # Fargate profiles use the cluster primary security group so these are not utilized

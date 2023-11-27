@@ -55,4 +55,5 @@ all_outputs = true
 es_secret_store_namespace = ["dev", "yelb"]
 app_mesh_sidecard_namespace = ["dev", "yelb"]
 cluster_name = "teste-apolinario"
-
+certificate_arn = "arn:aws:acm:us-east-1:122753118347:certificate/e4250189-fd00-4877-8458-b060997bb454"
+# kms_key_owners = ["arn:aws:iam::122753118347:role/AWSReservedSSO_AWSAdministratorAccess_21f7405f253561fa"]
