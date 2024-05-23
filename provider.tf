@@ -1,9 +1,9 @@
 provider "aws" {
   region = var.aws_region
 
-  default_tags {
-    tags = var.default_aws_tags
-  }
+  # default_tags {
+  #   tags = var.default_aws_tags
+  # }
 
   # # Descomment and put the Role to create the EKS Cluster
   # assume_role {
@@ -12,6 +12,16 @@ provider "aws" {
   # }
 
 }
+
+terraform {
+  backend "s3" {
+    bucket = "clouddog-devops-tfsate"
+    key    = "prd/eks"
+    region = "us-east-1"
+    profile = "clouddog-devops"
+  }
+}
+
 
 
 data "aws_eks_cluster_auth" "current" {

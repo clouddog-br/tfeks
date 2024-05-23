@@ -1,6 +1,3 @@
-output "vpc_outputs" {
-  value = var.all_outputs ? module.vpc : null
-}
 
 output "eks_outputs" {
   value = var.all_outputs ? module.eks : null

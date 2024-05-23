@@ -3,6 +3,13 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "vpc_id" {
+  type = string
+}
+
+variable "private_subnets"{
+  type = list
+}
 variable "aws_region" {
   description = "AWS Region to run the EKS"
   type = string

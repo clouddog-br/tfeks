@@ -4,8 +4,6 @@ locals {
   name = var.tfname
 
   aws_auth_roles = concat(
-    local.auth_roles_karpenter,
-    # local.auth_roles_lb,
     var.auth_roles,
     []
   )
@@ -44,13 +42,13 @@ module "eks" {
   # aws eks describe-addon-versions --addon-name kube-proxy
   cluster_addons = {
     kube-proxy = {
-      addon_version = "v1.28.2-eksbuild.2"
+      addon_version = "v1.29.3-eksbuild.2"
     }
     vpc-cni    = {
-      addon_version = "v1.15.0-eksbuild.2"
+      addon_version = "v1.18.1-eksbuild.3"
     }
     coredns = {
-      addon_version = "v1.10.1-eksbuild.4"
+      addon_version = "v1.11.1-eksbuild.9"
       configuration_values = jsonencode({
         computeType = "Fargate"
         # Ensure that we fully utilize the minimum amount of resources that are supplied by
@@ -112,4 +110,21 @@ module "eks" {
     # (i.e. - at most, only one security group should have this tag in your account)
     "karpenter.sh/discovery" = local.name
   })
+}
+
+
+module "karpenter" {
+  source = "terraform-aws-modules/eks/aws//modules/karpenter"
+
+  cluster_name = module.eks.cluster_name
+
+  # Attach additional IAM policies to the Karpenter node IAM role
+  node_iam_role_additional_policies = {
+    AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+  }
+
+  tags = {
+    Environment = "dev"
+    Terraform   = "true"
+  }
 }

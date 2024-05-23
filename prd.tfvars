@@ -1,20 +1,13 @@
 aws_region = "us-east-1"
+cluster_name = "clouddog-prod-eks"
 
 # VPC
-cidr = "10.2.0.0/16"
-qtt_az = 3
-create_subnet_public = true
-create_subnet_private = true
-create_nat_gateway = true
-one_nat_gateway_per_az = true
-create_subnet_data = true
-default_aws_tags = {
-  Environment = "prd"
-}
+vpc_id = "vpc-023c987cb3c83e473"
+private_subnets = ["subnet-0bd5bdd63d0ff7c8c", "subnet-076a03916bd4158b3"]
 
 # EKS
 cluster_endpoint_public_access = true #only for tests, it must be private with VPN
-kubernetes_version = "1.28"
+kubernetes_version = "1.29"
 
 # # Ex of auth_users
 # auth_users = [
